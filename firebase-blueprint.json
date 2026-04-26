@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "project": {
+      "title": "Project",
+      "description": "A software project developed by the agency",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "serviceId": { "type": "string", "description": "ID of the associated service (e.g. e-commerce)" },
+        "image": { "type": "string", "format": "uri" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "url": { "type": "string", "format": "uri", "description": "URL to the live version of the project" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "serviceId", "image"]
+    },
+    "service": {
+      "title": "Service",
+      "description": "A category of service offered by the agency",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "details": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/projects/{projectId}": {
+      "schema": "project",
+      "description": "Collection of agency projects"
+    }
+  }
+}
