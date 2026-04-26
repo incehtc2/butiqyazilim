@@ -1,16 +1,52 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { PRODUCTS } from '../constants';
+import { PRODUCTS as STATIC_PRODUCTS } from '../constants';
+import { db } from '../lib/firebase';
+import { collection, getDocs, orderBy, query, limit } from 'firebase/firestore';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+interface Product {
+  id?: string;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+  features: string[];
+  url?: string;
+  tag?: string;
+}
+
 export default function ProductsTeaser() {
-  const teaserProducts = PRODUCTS.slice(0, 2);
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'), limit(2));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        setDbProducts(data);
+      } catch {
+        // fallback to static
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const allProducts: Product[] = [...dbProducts];
+  (STATIC_PRODUCTS as Product[]).forEach(sp => {
+    if (!dbProducts.find(dp => dp.title === sp.title)) {
+      allProducts.push(sp);
+    }
+  });
+
+  const teaserProducts = allProducts.slice(0, 2);
 
   return (
     <section className="py-24 bg-background border-t border-border">
       <div className="max-w-7xl mx-auto px-6">
 
-        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-8">
           <div>
             <div className="section-label mb-5">Hazır Çözümler</div>
@@ -27,11 +63,10 @@ export default function ProductsTeaser() {
           </Link>
         </div>
 
-        {/* Products */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {teaserProducts.map((product, i) => (
             <motion.div
-              key={product.id}
+              key={product.id || i}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
