@@ -20,7 +20,6 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-            'motion': ['motion/react'],
             'firebase': [
               'firebase/app',
               'firebase/auth',
