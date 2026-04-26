@@ -1,10 +1,11 @@
+import { lazy, Suspense } from 'react';
 import Hero from './Hero';
 import Services from './Services';
 import Process from './Process';
-import Projects from './Projects';
-
-import Faq from './Faq';
 import ProductsTeaser from './ProductsTeaser';
+import Faq from './Faq';
+
+const Projects = lazy(() => import('./Projects'));
 
 export default function Home() {
   return (
@@ -15,9 +16,10 @@ export default function Home() {
       </div>
       <Process />
       <ProductsTeaser />
-      <Projects />
+      <Suspense fallback={<div className="py-24 bg-surface border-t border-border" />}>
+        <Projects />
+      </Suspense>
       <Faq />
-
     </>
   );
 }
