@@ -176,8 +176,9 @@ export default function AdminPanel() {
       setNewItem(initialItemState);
       setIsAdding(false);
       setEditingId(null);
-    } catch (error) {
-      console.error("Error saving item:", error);
+    } catch (err: any) {
+      console.error("Error saving item:", err);
+      setError('Kaydetme hatası: ' + (err?.message || 'Bilinmeyen hata'));
     }
   };
 
@@ -286,6 +287,13 @@ export default function AdminPanel() {
             </button>
           </div>
         </div>
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm flex justify-between items-center">
+            {error}
+            <button onClick={() => setError(null)} className="text-red-400/60 hover:text-red-400 ml-4">✕</button>
+          </div>
+        )}
 
         {/* Tab Switcher */}
         <div className="flex gap-4 mb-12 border-b border-neutral-800 pb-4">

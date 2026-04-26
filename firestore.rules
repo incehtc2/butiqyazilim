@@ -19,11 +19,28 @@ service cloud.firestore {
              (!data.keys().contains('url') || (data.url is string && data.url.size() <= 1000));
     }
 
+    // Product Validation
+    function isValidProduct(data) {
+      return data.keys().hasAll(['title', 'image']) &&
+             data.title is string && data.title.size() <= 200 &&
+             data.image is string && data.image.size() <= 1000 &&
+             (!data.keys().contains('url') || (data.url is string && data.url.size() <= 1000));
+    }
+
     match /projects/{projectId} {
-      allow read: if true; // Public can see projects
+      allow read: if true;
       allow create: if isSignedIn() && isValidProject(request.resource.data) && isValidId(projectId);
       allow update: if isSignedIn() && isValidProject(request.resource.data) && (
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'description', 'serviceId', 'image', 'tags', 'updatedAt', 'url'])
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'description', 'serviceId', 'image', 'images', 'tags', 'updatedAt', 'url'])
+      );
+      allow delete: if isSignedIn();
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidProduct(request.resource.data);
+      allow update: if isSignedIn() && isValidProduct(request.resource.data) && (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'description', 'category', 'image', 'images', 'features', 'url', 'updatedAt'])
       );
       allow delete: if isSignedIn();
     }

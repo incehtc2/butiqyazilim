@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(]*\" dist/assets/index-BXpjGAHi.js | head -20)",
+      "Bash(grep -o \"process\\\\.[^;,\\)\\\\\"'`]*\" dist/assets/index-BXpjGAHi.js | head -20)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const b=fs.readFileSync\\('dist/assets/index-BXpjGAHi.js','utf8'\\); const m=b.match\\(/process\\\\.\\\\w+/g\\); console.log\\([...new Set\\(m\\)]\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(npx firebase *)",
+      "Bash(firebase deploy *)",
+      "Read(//c/Users/okury/AppData/Roaming/npm/**)"
+    ]
+  }
+}
